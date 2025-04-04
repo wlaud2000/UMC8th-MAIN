@@ -54,12 +54,15 @@ public class Restaurant extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    // 리뷰는 시간순, 평점순 등으로 정렬이 필요할 수 있음
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "restaurant")
+    // 메뉴는 순서가 중요함 (메뉴판 표시 순서)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
+    // 미션은 시작일 등으로 정렬이 필요할 수 있음
     @OneToMany(mappedBy = "restaurant")
     private List<Mission> missions = new ArrayList<>();
 }

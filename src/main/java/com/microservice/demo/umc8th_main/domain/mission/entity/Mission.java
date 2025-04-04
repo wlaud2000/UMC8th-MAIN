@@ -7,7 +7,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,6 +48,8 @@ public class Mission extends BaseEntity {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    // 미션 참여는 중복이 없어야 하며 빠른 조회가 필요
     @OneToMany(mappedBy = "mission")
-    private List<UserMission> userMissions = new ArrayList<>();
+    private Set<UserMission> userMissions = new HashSet<>();
 }
+

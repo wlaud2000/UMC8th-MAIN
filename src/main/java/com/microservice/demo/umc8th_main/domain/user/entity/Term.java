@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,7 +43,7 @@ public class Term extends BaseEntity {
     @Column(name = "effective_date", nullable = false)
     private LocalDate effectiveDate;
 
+    // 약관 동의는 중복이 없어야 함 (사용자-약관 쌍은 유일)
     @OneToMany(mappedBy = "term")
-    private List<UserTermsAgreement> userAgreements = new ArrayList<>();
+    private Set<UserTermsAgreement> userAgreements = new HashSet<>();
 }
-

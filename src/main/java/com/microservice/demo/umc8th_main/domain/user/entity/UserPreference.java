@@ -21,8 +21,8 @@ public class UserPreference {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "preference_food_categories")
-    private String preferenceFoodCategories;
+    @Column(name = "preferred_food_categories")
+    private String preferredFoodCategories;
 
     @Column(name = "push_notification", nullable = false)
     private boolean pushNotification;
