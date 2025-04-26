@@ -42,10 +42,12 @@ public class Review extends BaseEntity {
     @Column(name = "like_count", nullable = false)
     private int likeCount;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    // 이미지는 순서가 매우 중요 (orderIndex 필드 존재)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    // 댓글은 시간순 정렬이 일반적
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewComment> comments = new ArrayList<>();
 }
 

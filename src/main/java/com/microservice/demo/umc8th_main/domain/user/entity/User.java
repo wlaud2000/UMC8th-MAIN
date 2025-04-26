@@ -12,7 +12,9 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -62,24 +64,31 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false, length = 20)
     private String role;
 
+    // 리뷰는 작성 순서, 시간순 등으로 정렬이 필요할 수 있음
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
+    // 댓글도 시간순 정렬이 중요
     @OneToMany(mappedBy = "user")
     private List<ReviewComment> reviewComments = new ArrayList<>();
 
+    // 미션 참여는 참여 여부만 중요하고 중복 방지가 필요
     @OneToMany(mappedBy = "user")
-    private List<UserMission> userMissions = new ArrayList<>();
+    private Set<UserMission> userMissions = new HashSet<>();
 
+    // 문의는 시간순으로 정렬이 필요
     @OneToMany(mappedBy = "user")
     private List<Inquiry> inquiries = new ArrayList<>();
 
+    // 포인트 내역은 시간순 정렬이 중요
     @OneToMany(mappedBy = "user")
     private List<PointHistory> pointHistories = new ArrayList<>();
 
+    // 약관 동의는 중복 없이 약관 ID로 빠르게 조회 필요
     @OneToMany(mappedBy = "user")
-    private List<UserTermsAgreement> termsAgreements = new ArrayList<>();
+    private Set<UserTermsAgreement> termsAgreements = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
+    // 사용자당 설정은 하나만 존재해야 함
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserPreference userPreference;
 }
