@@ -21,4 +21,18 @@ public class UserMissionResDTO {
             Integer spentAmount
     ) {
     }
+
+    @Builder
+    public record HomeMissionResponseDTO(
+            Long id,
+            String title,
+            String description,
+            int rewardPoints,
+            String restaurantName,
+            String restaurantCategory,
+            int minSpendAmount,
+            LocalDate endDate,
+            int daysRemaining
+    ) {
+    }
 }
