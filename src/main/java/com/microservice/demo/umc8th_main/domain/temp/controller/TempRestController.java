@@ -27,4 +27,12 @@ public class TempRestController {
         tempQueryService.CheckFlag(flag);
         return ApiResponse.onSuccess(TempConverter.toTempExceptionDTO(flag));
     }
+
+    @GetMapping("/error500")
+    public ApiResponse<String> cause500Error() {
+        // 강제로 NullPointerException 발생
+        String nullString = null;
+        nullString.length();  // NullPointerException 발생
+        return ApiResponse.onSuccess("이 코드는 실행되지 않습니다");
+    }
 }

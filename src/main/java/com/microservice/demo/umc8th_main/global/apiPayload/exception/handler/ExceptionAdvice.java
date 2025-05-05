@@ -4,8 +4,10 @@ import com.microservice.demo.umc8th_main.global.apiPayload.base.ApiResponse;
 import com.microservice.demo.umc8th_main.global.apiPayload.code.ErrorReasonDTO;
 import com.microservice.demo.umc8th_main.global.apiPayload.code.ErrorStatus;
 import com.microservice.demo.umc8th_main.global.apiPayload.exception.GeneralException;
+import com.microservice.demo.umc8th_main.global.service.WebhookService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,10 @@ import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
+@RequiredArgsConstructor
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+
+    private final WebhookService webhookService;
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -53,16 +58,26 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> exception(Exception e, WebRequest request) {
+    public ResponseEntity<Object> exception(Exception e, HttpServletRequest request) {
         e.printStackTrace();
 
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
+        // 500 에러인 경우 웹훅 전송
+        webhookService.sendErrorToDiscord(e, request);
+
+        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),
+                new ServletWebRequest(request), e.getMessage());
     }
 
     @ExceptionHandler(value = GeneralException.class)
     public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
         ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
-        return handleExceptionInternal(generalException,errorReasonHttpStatus,null,request);
+
+        // 500 에러인 경우 웹훅 전송
+        if (errorReasonHttpStatus.getHttpStatus().is5xxServerError()) {
+            webhookService.sendErrorToDiscord(generalException, request);
+        }
+
+        return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
