@@ -11,12 +11,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserMissionService {
+public class UserMissionQueryService {
 
     private final UserMissionRepository userMissionRepository;
 
     public List<UserMissionResDTO.UserMissionResponseDTO> getUserMissions(Long userId, String status, Long lastId) {
         // 기본 페이지 크기는 10으로 설정
         return userMissionRepository.findUserMissionsWithPaging(userId, status, lastId, 10);
+    }
+
+    public boolean isAlreadyInProgress(Long userId, Long missionId) {
+        return userMissionRepository.existsByUserIdAndMissionIdAndStatusIn(
+                userId, missionId, List.of("ONGOING", "PENDING"));
     }
 }
