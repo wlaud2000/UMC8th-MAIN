@@ -35,4 +35,12 @@ public class UserMissionResDTO {
             int daysRemaining
     ) {
     }
+
+    @Builder
+    public record JoinResultDTO(
+            Long id,
+            Long missionId,
+            String status,
+            LocalDateTime startedAt
+    ) {}
 }
