@@ -6,10 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ReviewResDTO {
+public class SliceReviewResDTO {
 
     @Builder
-    public record CreateResultDTO(
+    public record MyReviewSliceDTO(
             Long id,
             String content,
             Float rating,
@@ -19,21 +19,10 @@ public class ReviewResDTO {
     ) {}
 
     @Builder
-    public record MyReviewDTO(
-            Long id,
-            String content,
-            Float rating,
-            String restaurantName,
-            LocalDate visitDate,
-            LocalDateTime createdAt
-    ) {}
-
-    @Builder
-    public record MyReviewListDTO(
-            List<MyReviewDTO> reviewList,
+    public record MyReviewSliceListDTO(
+            List<MyReviewSliceDTO> reviewList,
             Integer listSize,
-            Integer totalPage,
-            Long totalElements,
+            Boolean hasNext,
             Boolean isFirst,
             Boolean isLast
     ) {}

@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserMissionResDTO {
 
@@ -43,4 +44,30 @@ public class UserMissionResDTO {
             String status,
             LocalDateTime startedAt
     ) {}
+
+    @Builder
+    public record MyMissionDTO(
+            Long id,
+            String missionTitle,
+            String missionDescription,
+            int rewardPoints,
+            String status,
+            LocalDateTime startedAt,
+            LocalDateTime completedAt,
+            String restaurantName,
+            int minSpendAmount,
+            Integer spentAmount
+    ) {
+    }
+
+    @Builder
+    public record MyMissionListDTO(
+            List<MyMissionDTO> missionList,
+            Integer listSize,
+            Integer totalPage,
+            Long totalElements,
+            Boolean isFirst,
+            Boolean isLast
+    ) {
+    }
 }
