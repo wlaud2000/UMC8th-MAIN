@@ -37,28 +37,6 @@ public class ReviewConverter {
                 .build();
     }
 
-    public static Review toReview2(User user, Restaurant restaurant, float rating, String content, LocalDate visitDate) {
-        return Review.builder()
-                .user(user)
-                .restaurant(restaurant)
-                .rating(rating)
-                .content(content)
-                .visitDate(visitDate != null ? visitDate : LocalDate.now())
-                .likeCount(0)
-                .build();
-    }
-
-    public static ReviewResDTO.CreateResultDTO toCreateResultDTO2(Review review) {
-        return ReviewResDTO.CreateResultDTO.builder()
-                .id(review.getId())
-                .content(review.getContent())
-                .rating(review.getRating())
-                .restaurantName(review.getRestaurant().getName())
-                .visitDate(review.getVisitDate())
-                .createdAt(review.getCreatedAt())
-                .build();
-    }
-
     // 내 리뷰 목록을 위한 메서드 추가
     public static ReviewResDTO.MyReviewDTO toMyReviewDTO(Review review) {
         return ReviewResDTO.MyReviewDTO.builder()
